@@ -239,7 +239,6 @@ public class Field {
             for(int c = 0; c < columnCount; c++){
                 tiles[r][c].setOccupied(Tile.State.EMPTY);
             }
-            score += 20;
         }
 
         for(int i = 0; i < colsClear.size(); i++){
@@ -247,16 +246,18 @@ public class Field {
             for(int r = 0; r < rowCount; r++){
                 tiles[r][c].setOccupied(Tile.State.EMPTY);
             }
-            score += 20;
         }
 
         int totalLines = rowsClear.size() + colsClear.size();
-        if(totalLines > 0){
-            int lineBonus = (totalLines * (totalLines + 1) / 2) * 100;
-            score += lineBonus;
+        if (totalLines > 0) {
+            int linePoints = 20;
+            for (int i = 1; i < totalLines; i++) {
+                linePoints = linePoints * 2;
+            }
+            score += linePoints;
 
             if(totalLines > 1){
-                System.out.println("COOL! Combo x" + totalLines + "! +" + lineBonus + " points!");
+                System.out.println("COMBO x" + totalLines + "! +" + linePoints+ " points!");
             }
         }
     }

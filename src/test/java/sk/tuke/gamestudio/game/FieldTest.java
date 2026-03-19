@@ -38,14 +38,31 @@ public class FieldTest {
     }
 
     @Test
-    public void testRemoveLineClearsTiles() {
+    public void testRemoveLine1() {
         int[][] longShape = {{1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
         Block longBlock = new Block(longShape, "@");
 
         field.placeBlock(longBlock, 0, 0);
+
         field.removeLine();
 
         assertFalse(field.getTile(0, 0).isOccupied(), "The line should be cleared after remove");
+
+        assertEquals(30, field.getScore(), "Score should be 30 (10 for block cells + 20 for one line)");
+    }
+
+    @Test
+    public void testRemoveTwoLinesComboPoints() {
+        int[][] longShape = {{1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
+        Block block1 = new Block(longShape, "@");
+        Block block2 = new Block(longShape, "#");
+
+        field.placeBlock(block1, 0, 0);
+        field.placeBlock(block2, 1, 0);
+
+        field.removeLine();
+
+        assertEquals(60, field.getScore(), "Score should be 60 (20 for cells + 40 for double line combo)");
     }
 
     @Test
