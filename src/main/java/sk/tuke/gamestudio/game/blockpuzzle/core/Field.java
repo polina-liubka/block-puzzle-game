@@ -249,9 +249,9 @@ public class Field {
         }
 
         int totalLines = rowsClear.size() + colsClear.size();
-        if (totalLines > 0) {
+        if(totalLines > 0){
             int linePoints = 20;
-            for (int i = 1; i < totalLines; i++) {
+            for(int i = 1; i < totalLines; i++){
                 linePoints = linePoints * 2;
             }
             score += linePoints;

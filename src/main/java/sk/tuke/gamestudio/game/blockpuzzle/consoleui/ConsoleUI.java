@@ -1,6 +1,5 @@
 package sk.tuke.gamestudio.game.blockpuzzle.consoleui;
 
-import sk.tuke.gamestudio.entity.Rating;
 import sk.tuke.gamestudio.entity.Score;
 import sk.tuke.gamestudio.game.blockpuzzle.core.Block;
 import sk.tuke.gamestudio.game.blockpuzzle.core.Field;
@@ -14,38 +13,21 @@ public class ConsoleUI {
     private final Scanner scanner = new Scanner(System.in);
     private String playerName;
     private final ScoreService scoreService = new ScoreServiceJDBC();
-    private final CommentService commentService = new CommentServiceJDBC();
-    private final RatingService ratingService = new RatingServiceJDBC();
+    private final FeedbackUI feedback = new FeedbackUI();
 
     public ConsoleUI(Field field) {
         this.field = field;
-    }
-
-    private void printTopScores() {
-        try{
-            List<Score> scores = scoreService.getTopScores("blockpuzzle");
-            System.out.println("\n--- TOP 10 player scores ---");
-            if(scores.isEmpty()){
-                System.out.println("   No scores recorded yet.   ");
-            }else{
-                for (int i = 0; i < scores.size(); i++) {
-                    Score s = scores.get(i);
-                    System.out.printf("%d. %-15s %10d\n", i + 1, s.getPlayer(), s.getPoints());
-                }
-            }
-            System.out.println("\n");
-        } catch (Exception e) {
-            System.out.println("Could not load scores from database.");
-        }
     }
 
     public void play() {
         System.out.println("--- BLOCK PUZZLE ---");
         System.out.print("Enter your name: ");
         this.playerName = scanner.nextLine().trim();
-        if (this.playerName.isEmpty()) this.playerName = "Guest";
+        if(this.playerName.isEmpty()){
+            this.playerName = "Guest";
+        }
 
-        printTopScores();
+        feedback.printTopScores();
 
         field.generateBlocks();
         while(!field.isOver()){
@@ -64,6 +46,7 @@ public class ConsoleUI {
         System.out.println("***Game is over!*** Your score is: " + field.getScore());
 
         scoreService.addScore(new Score("blockpuzzle", playerName, field.getScore(), new java.util.Date()));
+        feedback.handleFeedback(playerName);
     }
 
     private void handleInput() {
@@ -72,6 +55,7 @@ public class ConsoleUI {
 
         if(line.equalsIgnoreCase("exit")){
             scoreService.addScore(new Score("blockpuzzle", playerName, field.getScore(), new java.util.Date()));
+            feedback.handleFeedback(playerName);
             System.out.println("Goodbye! I hope you'll come back!");
             System.exit(0);
         }

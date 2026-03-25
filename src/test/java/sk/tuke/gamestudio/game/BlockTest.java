@@ -14,7 +14,7 @@ public class BlockTest {
                 {1, 0},
                 {1, 1}
         };
-        Block block = new Block(shape, "RED");
+        Block block = new Block(shape, "@");
 
         assertEquals(3, block.getHeight(), "The height of the block should be 3");
         assertEquals(2, block.getWidth(), "The block width should be 2");
@@ -23,7 +23,7 @@ public class BlockTest {
     @Test
     public void testBlockShapeIntegrity() {
         int[][] shape = {{1, 1}, {0, 1}};
-        Block block = new Block(shape, "GREEN");
+        Block block = new Block(shape, "%");
 
         assertArrayEquals(shape, block.getShape(), "The array of the form must be identical to the original");
     }
