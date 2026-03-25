@@ -8,7 +8,7 @@ public class Comment {
     private String comment;
     private Date playedOn;
 
-    public Comment(String player, String game, String comment, Date playedOn) {
+    public Comment(String game, String player, String comment, Date playedOn) {
         this.player = player;
         this.game = game;
         this.comment = comment;

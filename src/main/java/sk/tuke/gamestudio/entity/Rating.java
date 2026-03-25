@@ -8,7 +8,7 @@ public class Rating {
     private int rating;
     private Date playedOn;
 
-    public Rating(String player, String game, int rating, Date playedOn) {
+    public Rating(String game, String player, int rating, Date playedOn) {
         this.player = player;
         this.game = game;
         this.rating = rating;
