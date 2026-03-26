@@ -14,15 +14,41 @@ public class RatingServiceJDBC implements RatingService {
 
     @Override
     public void setRating(Rating rating) {
-        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
-             PreparedStatement statement = connection.prepareStatement(INSERT)) {
-            statement.setString(1, rating.getGame());
-            statement.setString(2, rating.getPlayer());
-            statement.setInt(3, rating.getRating());
-            statement.setTimestamp(4, new Timestamp(rating.getPlayedOn().getTime()));
-            statement.executeUpdate();
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
+            String checkSql = "SELECT COUNT(*) FROM rating WHERE game = ? AND player = ?";
+            boolean exists = false;
+
+            try (PreparedStatement check = connection.prepareStatement(checkSql)) {
+                check.setString(1, rating.getGame());
+                check.setString(2, rating.getPlayer());
+                try (ResultSet rs = check.executeQuery()) {
+                    if (rs.next() && rs.getInt(1) > 0) {
+                        exists = true;
+                    }
+                }
+            }
+            if(exists){
+                String updateSql = "UPDATE rating SET rating = ?, playedOn = ? WHERE game = ? AND player = ?";
+                try (PreparedStatement updateStmt = connection.prepareStatement(updateSql)) {
+                    updateStmt.setInt(1, rating.getRating());
+                    updateStmt.setTimestamp(2, new Timestamp(rating.getPlayedOn().getTime()));
+                    updateStmt.setString(3, rating.getGame());
+                    updateStmt.setString(4, rating.getPlayer());
+                    updateStmt.executeUpdate();
+                }
+            } else {
+                String insertSql = "INSERT INTO rating (game, player, rating, playedOn) VALUES (?, ?, ?, ?)";
+                try (PreparedStatement insertStmt = connection.prepareStatement(insertSql)) {
+                    insertStmt.setString(1, rating.getGame());
+                    insertStmt.setString(2, rating.getPlayer());
+                    insertStmt.setInt(3, rating.getRating());
+                    insertStmt.setTimestamp(4, new Timestamp(rating.getPlayedOn().getTime()));
+                    insertStmt.executeUpdate();
+                }
+            }
+
         } catch (SQLException e) {
-            throw new RatingException("Problem inserting rating", e);
+            throw new RatingException("Problem setting rating", e);
         }
     }
 
