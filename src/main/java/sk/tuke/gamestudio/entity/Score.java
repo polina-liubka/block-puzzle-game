@@ -1,15 +1,26 @@
 package sk.tuke.gamestudio.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import java.util.Date;
 
+@Entity
+@NamedQuery(name = "Score.getTopScores",
+        query = "SELECT s FROM Score s WHERE s.game=:game ORDER BY s.points DESC")
+@NamedQuery(name = "Score.resetScores",
+        query = "DELETE FROM Score")
 public class Score {
+    @Id
+    @GeneratedValue
+    private int ident;
     private String game;
-
     private String player;
-
     private int points;
-
     private Date playedOn;
+
+    public Score() {}
 
     public Score(String game, String player, int points, Date playedOn) {
         this.game = game;
@@ -53,10 +64,10 @@ public class Score {
     @Override
     public String toString() {
         return "Score{" +
-                "game='" + game + '\'' +
+                "ident=" + ident +
+                ", game='" + game + '\'' +
                 ", player='" + player + '\'' +
                 ", points=" + points +
-                ", playedOn=" + playedOn +
-                '}';
+                ", playedOn=" + playedOn + '}';
     }
 }

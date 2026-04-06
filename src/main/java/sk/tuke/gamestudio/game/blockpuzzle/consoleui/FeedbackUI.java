@@ -1,5 +1,7 @@
 package sk.tuke.gamestudio.game.blockpuzzle.consoleui;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import sk.tuke.gamestudio.entity.Rating;
 import sk.tuke.gamestudio.entity.Comment;
 import sk.tuke.gamestudio.entity.Score;
@@ -8,10 +10,17 @@ import sk.tuke.gamestudio.service.*;
 import java.util.List;
 import java.util.Scanner;
 
+@Component
 public class FeedbackUI {
-    private final ScoreService scoreService = new ScoreServiceJDBC();
-    private final CommentService commentService = new CommentServiceJDBC();
-    private final RatingService ratingService = new RatingServiceJDBC();
+    @Autowired
+    private ScoreService scoreService;
+
+    @Autowired
+    private CommentService commentService;
+
+    @Autowired
+    private RatingService ratingService;
+
     private final Scanner scanner = new Scanner(System.in);
 
     public void handleFeedback(String playerName) {
@@ -24,7 +33,7 @@ public class FeedbackUI {
     public void printTopScores() {
         List<Score> scores = scoreService.getTopScores("blockpuzzle");
         System.out.println("\n--- TOP 10 player scores ---");
-        if(scores.isEmpty()){
+        if(scores == null || scores.isEmpty()){
             System.out.println("No scores recorded yet.");
         }else{
             for(int i = 0; i < scores.size(); i++){
@@ -49,13 +58,17 @@ public class FeedbackUI {
         String input = scanner.nextLine().trim();
 
         if(!input.isEmpty()){
-            int stars = Integer.parseInt(input);
-            if(stars >= 1 && stars <= 5){
-                Rating rating = new Rating("blockpuzzle", playerName, stars, new java.util.Date());
-                ratingService.setRating(rating);
-                System.out.println("Thank you for your feedback!");
-            }else{
-                System.out.println("It should be between 1 and 5");
+            try {
+                int stars = Integer.parseInt(input);
+                if(stars >= 1 && stars <= 5){
+                    Rating rating = new Rating("blockpuzzle", playerName, stars, new java.util.Date());
+                    ratingService.setRating(rating);
+                    System.out.println("Thank you for your feedback!");
+                }else{
+                    System.out.println("It should be between 1 and 5");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a valid number.");
             }
         }
     }
@@ -67,7 +80,7 @@ public class FeedbackUI {
         if(choice.equals("y")){
             List<Comment> comments = commentService.getComments("blockpuzzle");
             System.out.println("\n^_^ Comments: ");
-            if(comments.isEmpty()){
+            if(comments == null || comments.isEmpty()){
                 System.out.println("╮（╯＿╰）╭ There are no comments yet — be the first!");
             }else{
                 int count = Math.min(comments.size(), 5);

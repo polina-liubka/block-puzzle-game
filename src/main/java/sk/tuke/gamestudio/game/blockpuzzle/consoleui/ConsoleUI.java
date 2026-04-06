@@ -1,5 +1,6 @@
 package sk.tuke.gamestudio.game.blockpuzzle.consoleui;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import sk.tuke.gamestudio.entity.Score;
 import sk.tuke.gamestudio.game.blockpuzzle.core.Block;
 import sk.tuke.gamestudio.game.blockpuzzle.core.Field;
@@ -12,8 +13,12 @@ public class ConsoleUI {
     private final Field field;
     private final Scanner scanner = new Scanner(System.in);
     private String playerName;
-    private final ScoreService scoreService = new ScoreServiceJDBC();
-    private final FeedbackUI feedback = new FeedbackUI();
+
+    @Autowired
+    private ScoreService scoreService;
+
+    @Autowired
+    private FeedbackUI feedback;
 
     public ConsoleUI(Field field) {
         this.field = field;
