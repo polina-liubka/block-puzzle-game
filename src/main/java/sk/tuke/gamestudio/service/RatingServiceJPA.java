@@ -4,6 +4,7 @@ import sk.tuke.gamestudio.entity.Rating;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import javax.persistence.NoResultException;
 
 @Transactional
 public class RatingServiceJPA implements RatingService {
@@ -13,22 +14,15 @@ public class RatingServiceJPA implements RatingService {
 
     @Override
     public void setRating(Rating rating) throws RatingException {
-        int count = ((Number) entityManager.createNativeQuery(
-                        "SELECT count(*) FROM rating WHERE game = ?1 AND player = ?2")
-                .setParameter(1, rating.getGame())
-                .setParameter(2, rating.getPlayer())
-                .getSingleResult()).intValue();
-
-        if(count > 0){
-            entityManager.createNativeQuery(
-                            "UPDATE rating SET rating = ?1, playedon = ?2 WHERE game = ?3 AND player = ?4")
-                    .setParameter(1, rating.getRating())
-                    .setParameter(2, rating.getPlayedOn())
-                    .setParameter(3, rating.getGame())
-                    .setParameter(4, rating.getPlayer())
-                    .executeUpdate();
-        }else{
-            entityManager.persist(rating);
+        try{
+            Rating existingRating = (Rating) entityManager.createNamedQuery("Rating.getRatingObject")
+                    .setParameter("game", rating.getGame())
+                    .setParameter("player", rating.getPlayer())
+                    .getSingleResult();
+            existingRating.setRating(rating.getRating());
+            existingRating.setPlayedOn(rating.getPlayedOn());
+        }catch (NoResultException e){
+            entityManager.merge(rating);
         }
     }
 
@@ -42,12 +36,12 @@ public class RatingServiceJPA implements RatingService {
 
     @Override
     public int getRating(String game, String player) throws RatingException {
-        try {
+        try{
             return (int) entityManager.createNamedQuery("Rating.getRating")
                     .setParameter("game", game)
                     .setParameter("player", player)
                     .getSingleResult();
-        } catch (Exception e) {
+        }catch (NoResultException e){
             return 0;
         }
     }

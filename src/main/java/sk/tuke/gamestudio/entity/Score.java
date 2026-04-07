@@ -18,6 +18,7 @@ public class Score {
     private String game;
     private String player;
     private int points;
+    @javax.persistence.Column(name = "playedon")
     private Date playedOn;
 
     public Score() {}
