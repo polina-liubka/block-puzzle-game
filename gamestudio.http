@@ -1,0 +1,11 @@
+### ziskanie top score pre danu hru
+GET http://localhost:8080/api/score/blockpuzzle
+
+### ziskanie vsetkych komentarov pre hru
+GET http://localhost:8080/api/comment/blockpuzzle
+
+### ziskanie priemerneho hodnotenia hry
+GET http://localhost:8080/api/rating/blockpuzzle
+
+### ziskanie hodnotenia hry konkretneho hraca
+GET http://localhost:8080/api/rating/blockpuzzle/michal

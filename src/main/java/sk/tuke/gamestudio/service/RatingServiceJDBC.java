@@ -10,7 +10,7 @@ public class RatingServiceJDBC implements RatingService {
     public static final String SELECT_AVG = "SELECT AVG(rating) FROM rating WHERE game = ?";
     public static final String SELECT_SINGLE = "SELECT rating FROM rating WHERE game = ? AND player = ? ORDER BY playedOn DESC LIMIT 10";
     public static final String DELETE = "DELETE FROM rating";
-    public static final String INSERT = "INSERT INTO rating (game, player, rating, playedOn) VALUES (?, ?, ?, ?)";
+    public static final String INSERT = "INSERT INTO rating (game, player, rating, playedOn, ident) VALUES (?, ?, ?, ?, nextval('hibernate_sequence'))";
 
     @Override
     public void setRating(Rating rating) {
@@ -37,7 +37,7 @@ public class RatingServiceJDBC implements RatingService {
                     updateStmt.executeUpdate();
                 }
             } else {
-                String insertSql = "INSERT INTO rating (game, player, rating, playedOn) VALUES (?, ?, ?, ?)";
+                String insertSql = "INSERT INTO rating (game, player, rating, playedOn, ident) VALUES (?, ?, ?, ?, nextval('hibernate_sequence'))";
                 try (PreparedStatement insertStmt = connection.prepareStatement(insertSql)) {
                     insertStmt.setString(1, rating.getGame());
                     insertStmt.setString(2, rating.getPlayer());
