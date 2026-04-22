@@ -1,0 +1,89 @@
+body {
+    background-color: #2c2c2c;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 20px;
+}
+
+/* herne pole */
+.game-table {
+    border-collapse: collapse;
+    margin: 20px auto;
+}
+
+.game-table td {
+    padding: 0;
+    line-height: 0;
+    width: 40px;
+    height: 40px;
+    border: 1px solid #444;
+}
+
+.game-table img {
+    display: block;
+    border: none;
+    width: 40px;
+    height: 40px;
+}
+
+.game-table td a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+}
+
+.game-table td a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #444;
+    text-align: left;
+}
+
+th {
+    background-color: #333;
+}
+
+input, textarea, select {
+    background-color: #333;
+    color: white;
+    border: 1px solid #555;
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+}
+
+.blocks-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 30px;
+}

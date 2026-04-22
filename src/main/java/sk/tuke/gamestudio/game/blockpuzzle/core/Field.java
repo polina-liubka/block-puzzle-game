@@ -40,6 +40,10 @@ public class Field {
         return tiles[row][col];
     }
 
+    public Tile[][] getTiles() {
+        return tiles;
+    }
+
     public void printField() {
         System.out.print("    ");
         for(int c = 1; c <= columnCount; c++){
@@ -154,7 +158,8 @@ public class Field {
     }
 
     private Block randomBlocks() {
-        String[] colors = {"#", "@", "&", "$", "%", "*", "O"};
+        //String[] colors = {"#", "@", "&", "$", "%", "*", "O"};
+        String[] colors = {"#e74c3c", "#3498db", "#2ecc71", "#f39c12", "#9b59b6", "#1abc9c", "#e67e22"};
 
         int shapeIndex = (int) (Math.random() * allShapes.size());
         int colorIndex = (int) (Math.random() * colors.length);
@@ -287,20 +292,37 @@ public class Field {
         }
     }
 
+    public void reset() {
+        this.state = GameState.PLAYING;
+        this.score = 0;
+        this.hasBomb = false;
+        for (int r = 0; r < rowCount; r++) {
+            for (int c = 0; c < columnCount; c++) {
+                tiles[r][c].setOccupied(Tile.State.EMPTY);
+            }
+        }
+        generateBlocks();
+    }
+
     public void gameOver() {
+        if(blocks == null || blocks.isEmpty() || blocks.stream().allMatch(b -> b == null)){
+            return;
+        }
+
         for(int i = 0; i < blocks.size(); i++){
             Block b = blocks.get(i);
             if(b != null){
                 for(int r = 0; r < rowCount; r++){
                     for(int c = 0; c < columnCount; c++){
                         if(canPlace(b, r, c)){
+                            this.state = GameState.PLAYING;
                             return;
                         }
                     }
                 }
             }
         }
-
         this.state = GameState.FAILED;
+        System.out.println("GAME OVER TRIGGERED");
     }
 }

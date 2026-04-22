@@ -57,3 +57,4 @@ When creating new unit tests, place them into the `src/test/java/sk.tuke.gamestu
 Use the [standard Maven directory layout](https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html) and GameStudio recommended directory structure when adding more classes.
 
 link https://youtube.com/shorts/uxbID26AE5M?feature=share - my game(Block Puzzle)
+link https://youtu.be/e4j5t8oNcIQ - druha odovzdavka(Block Puzzle)

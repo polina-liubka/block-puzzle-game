@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Block Puzzle</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div style="max-width: 800px; margin: 0 auto;">
+    <h2 style="text-align: center;">Block Puzzle</h2>
+
+    <div class="game-container" style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
+        <div th:utext="${@blockPuzzleController.getHtmlBlocks()}"></div>
+        <div th:utext="${@blockPuzzleController.getHtmlField()}"></div>
+    </div>
+
+    <div class="game-management" style="margin-top: 30px; background: #333; padding: 25px; border-radius: 10px; color: white;">
+        <h3 style="text-align: center; color: #f1c40f;">Finish & Save Results</h3>
+
+        <!--prenos údajov do databázy-->
+        <form action="/block-puzzle" method="get">
+            <input type="hidden" name="command" value="exit">
+
+            <div style="display: flex; flex-direction: column; gap: 15px; max-width: 400px; margin: 0 auto;">
+
+                <label>Your Name:
+                    <input type="text" name="player" th:value="${currentPlayer}" required style="width: 100%; padding: 8px;">
+                </label>
+
+                <label>Rate the game:
+                    <select name="rating" style="width: 100%; padding: 8px;">
+                        <option value="0"> </option>
+                        <option value="5">5 - Awesome</option>
+                        <option value="4">4 - Good</option>
+                        <option value="3">3 - Okay</option>
+                        <option value="2">2 - Bad</option>
+                        <option value="1">1 - Terrible</option>
+                    </select>
+                </label>
+
+                <label>Your Comment:
+                    <textarea name="commentText" style="width: 100%; height: 60px; padding: 8px;"></textarea>
+                </label>
+
+                <div style="text-align: center; margin-top: 10px;">
+                    <div th:if="${gameOver}">
+                        <h2 style="color: #e74c3c;">GAME OVER!</h2>
+                        <p>Final Score: <strong th:text="${score}">0</strong></p>
+                        <button type="submit" style="background-color: #e74c3c; width: 100%; padding: 15px; color: white; border: none; cursor: pointer;">
+                            SAVE ALL & RESTART
+                        </button>
+                    </div>
+
+                    <div th:if="${!gameOver}">
+                        <p>Current Score: <strong th:text="${score}">0</strong></p>
+                        <button type="submit" th:disabled="${score == 0}" style="background-color: #27ae60; width: 100%; padding: 12px; color: white; border: none; cursor: pointer;">
+                            SAVE & EXIT
+                        </button>
+                    </div>
+                </div>
+
+                <div style="text-align: center;">
+                    <a href="/block-puzzle?command=new" style="color: #3498db; text-decoration: none; font-size: 0.9em;">
+                        Discard and Start New Game
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <hr style="margin: 40px 0; border: 0; border-top: 1px solid #555;"/>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+
+        <div>
+            <h3>Top Scores</h3>
+            <table border="1" style="width: 100%; text-align: left;">
+                <thead>
+                <tr><th>Player</th><th>Score</th></tr>
+                </thead>
+                <tbody>
+                <tr th:each="s : ${scores}">
+                    <td th:text="${s.player}"></td>
+                    <td th:text="${s.points}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div>
+            <h3>Recent Comments (Avg Rating: <span th:text="${avgRating}">0</span>)</h3>
+            <table border="1" style="width: 100%; text-align: left;">
+                <thead>
+                <tr><th>Player</th><th>Comment</th></tr>
+                </thead>
+                <tbody>
+                <tr th:each="c : ${comments}">
+                    <td th:text="${c.player}"></td>
+                    <td th:text="${c.comment}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

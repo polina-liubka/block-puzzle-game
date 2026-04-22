@@ -8,4 +8,4 @@ GET http://localhost:8080/api/comment/blockpuzzle
 GET http://localhost:8080/api/rating/blockpuzzle
 
 ### ziskanie hodnotenia hry konkretneho hraca
-GET http://localhost:8080/api/rating/blockpuzzle/michal
+GET http://localhost:8080/api/rating/blockpuzzle/chloe
