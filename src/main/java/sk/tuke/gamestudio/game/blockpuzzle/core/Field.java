@@ -27,7 +27,18 @@ public class Field {
         }
     }
 
+    public int getRowCount() {
+        return rowCount;
+    }
+
+    public int getColumnCount() {
+        return columnCount;
+    }
+
     public boolean isOver(){
+        if(isMovesMode && movesLeft <= 0){
+            return true;
+        }
         return state == GameState.FAILED;
     }
     public int getScore(){
@@ -43,6 +54,22 @@ public class Field {
     public Tile[][] getTiles() {
         return tiles;
     }
+
+    private int movesLeft;
+    private boolean isMovesMode = false;
+    public void setupMovesMode(int moves) {
+        this.movesLeft = moves;
+        this.isMovesMode = true;
+    }
+
+    public void decrementMoves() {
+        if (isMovesMode && movesLeft > 0) {
+            movesLeft--;
+        }
+    }
+
+    public int getMovesLeft() { return movesLeft; }
+    public boolean isMovesMode() { return isMovesMode; }
 
     public void printField() {
         System.out.print("    ");
@@ -155,17 +182,18 @@ public class Field {
                 {0, 0, 1},
                 {0, 0, 1}
         });
-    }
+    }//String[] colors = {"#", "@", "&", "$", "%", "*", "O"};
 
     private Block randomBlocks() {
         //String[] colors = {"#", "@", "&", "$", "%", "*", "O"};
-        String[] colors = {"#e74c3c", "#3498db", "#2ecc71", "#f39c12", "#9b59b6", "#1abc9c", "#e67e22"};
+        String[] blockColors = {"blue", "green", "skyblue", "beige", "red", "yellow", "black", "orange", "brown"};
 
         int shapeIndex = (int) (Math.random() * allShapes.size());
-        int colorIndex = (int) (Math.random() * colors.length);
+        int colorIndex = (int) (Math.random() * blockColors.length);
 
-        return new Block(allShapes.get(shapeIndex), colors[colorIndex]);
+        return new Block(allShapes.get(shapeIndex), blockColors[colorIndex]);
     }
+
     public void generateBlocks() {
         blocks.clear();
         for(int i = 0; i < 3; i++){
@@ -207,6 +235,7 @@ public class Field {
             }
         }
         score += scoreCount;
+        generateBomb();
     }
 
     public void removeLine() {
@@ -296,6 +325,7 @@ public class Field {
         this.state = GameState.PLAYING;
         this.score = 0;
         this.hasBomb = false;
+        this.isMovesMode = false;
         for (int r = 0; r < rowCount; r++) {
             for (int c = 0; c < columnCount; c++) {
                 tiles[r][c].setOccupied(Tile.State.EMPTY);

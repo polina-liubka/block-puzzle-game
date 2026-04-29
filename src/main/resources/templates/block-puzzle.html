@@ -3,107 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <title>Block Puzzle</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/style_game.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script type="text/javascript">
+        let draggedBlockIndex = null;
+
+        //kruh pre bomb
+        function createExplosionCircle(x, y) {
+            const container = $("#fx-container");
+            if (container.length === 0) return;
+
+            const circle = $('<div class="explosion-circle"></div>');
+            const offset = container.offset();
+
+            circle.css({
+                left: (x - offset.left) + 'px',
+                top: (y - offset.top) + 'px'
+            });
+
+            container.append(circle);
+            setTimeout(() => circle.remove(), 400);
+        }
+
+        //odstranime blikanie stranky
+        function renderFinalState(data) {
+            const newHtml = $(data);
+            $("#blocks-part").html(newHtml.find("#blocks-inner").html());
+            $("#field-part").html(newHtml.find("#field-inner").html());
+            $("#score-part").html(newHtml.find("#score-inner").html());
+            $("#bomb-part").html(newHtml.find("#bomb-inner").html());
+            draggedBlockIndex = null;
+        }
+
+        //vykonat krok - ziskat vysledok
+        function updateGame(url, event = null){
+            if ($(".bomb-btn").hasClass("active-bomb") && event) {
+                createExplosionCircle(event.pageX || event.clientX, event.pageY || event.clientY);
+            }
+
+            $.get(url, function(data) {
+                renderFinalState(data);
+            });
+        }
+
+        //presuneme bomb
+        $(document).on('click', '#field-part td a', function(e) {
+            if ($(".bomb-btn").hasClass("active-bomb")) {
+                e.preventDefault();
+                updateGame($(this).attr("href"), e);
+            }
+        });
+
+        //presuneme figuru
+        $(document).on('mousedown', '.block-link', function(){
+            const href = $(this).attr('href');
+            if (href && href.includes('blockIndex=')) {
+                draggedBlockIndex = href.split('blockIndex=')[1];
+            }
+        });
+
+        $(document).on('dragstart', '.block-link', function(e){
+            $(this).addClass('dragging');
+            if (e.originalEvent.dataTransfer) {
+                e.originalEvent.dataTransfer.setDragImage(this, 0, 0);
+            }
+        });
+
+        $(document).on('drop', '#field-part td a', function(e){
+            e.preventDefault();
+            const cellHref = $(this).attr('href');
+
+            if(cellHref){
+                const urlParams = new URLSearchParams(cellHref.split('?')[1]);
+                let targetUrl = "/block-puzzle/content?command=place" +
+                                "&row=" + urlParams.get('row') +
+                                "&column=" + urlParams.get('column');
+                if(draggedBlockIndex !== null){
+                    targetUrl += "&blockIndex=" + draggedBlockIndex;
+                }
+
+                updateGame(targetUrl, e);
+            }
+        });
+
+        $(document).on('dragover', '#field-part td a', e => e.preventDefault());
+
+        $(document).on('dragend', '.block-link', function(){
+            $('.block-link').removeClass('dragging');
+        });
+        $(document).on("click", ".ajax-link", function(e) {
+            if($(this).closest('#field-part').length === 0){
+                e.preventDefault();
+                updateGame($(this).attr("href"), e);
+            }
+        });
+    </script>
 </head>
-<body>
-
-<div style="max-width: 800px; margin: 0 auto;">
-    <h2 style="text-align: center;">Block Puzzle</h2>
-
-    <div class="game-container" style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
-        <div th:utext="${@blockPuzzleController.getHtmlBlocks()}"></div>
-        <div th:utext="${@blockPuzzleController.getHtmlField()}"></div>
-    </div>
-
-    <div class="game-management" style="margin-top: 30px; background: #333; padding: 25px; border-radius: 10px; color: white;">
-        <h3 style="text-align: center; color: #f1c40f;">Finish & Save Results</h3>
-
-        <!--prenos údajov do databázy-->
-        <form action="/block-puzzle" method="get">
-            <input type="hidden" name="command" value="exit">
-
-            <div style="display: flex; flex-direction: column; gap: 15px; max-width: 400px; margin: 0 auto;">
-
-                <label>Your Name:
-                    <input type="text" name="player" th:value="${currentPlayer}" required style="width: 100%; padding: 8px;">
-                </label>
-
-                <label>Rate the game:
-                    <select name="rating" style="width: 100%; padding: 8px;">
-                        <option value="0"> </option>
-                        <option value="5">5 - Awesome</option>
-                        <option value="4">4 - Good</option>
-                        <option value="3">3 - Okay</option>
-                        <option value="2">2 - Bad</option>
-                        <option value="1">1 - Terrible</option>
-                    </select>
-                </label>
-
-                <label>Your Comment:
-                    <textarea name="commentText" style="width: 100%; height: 60px; padding: 8px;"></textarea>
-                </label>
-
-                <div style="text-align: center; margin-top: 10px;">
-                    <div th:if="${gameOver}">
-                        <h2 style="color: #e74c3c;">GAME OVER!</h2>
-                        <p>Final Score: <strong th:text="${score}">0</strong></p>
-                        <button type="submit" style="background-color: #e74c3c; width: 100%; padding: 15px; color: white; border: none; cursor: pointer;">
-                            SAVE ALL & RESTART
-                        </button>
+<body class="game-page">
+    <div id="flash-overlay" class="bomb-flash"></div>
+    <div class="game-layout">
+        <div class="top-interface">
+            <div class="header-left-zone">
+                <h1 class="pixel-title-game">BLOCK PUZZLE</h1>
+                <div class="home-btn-wrapper">
+                    <a href="/block-puzzle-home" class="home-link-minimal">HOME</a>
+                    <div style="margin-top: 10px;">
+                        <a href="/block-puzzle/stats" class="home-link-minimal" style="color: #f1c40f; font-size: 0.8em; border-color: #f1c40f;">
+                            LEAVE FEEDBACK
+                        </a>
                     </div>
-
-                    <div th:if="${!gameOver}">
-                        <p>Current Score: <strong th:text="${score}">0</strong></p>
-                        <button type="submit" th:disabled="${score == 0}" style="background-color: #27ae60; width: 100%; padding: 12px; color: white; border: none; cursor: pointer;">
-                            SAVE & EXIT
-                        </button>
-                    </div>
-                </div>
-
-                <div style="text-align: center;">
-                    <a href="/block-puzzle?command=new" style="color: #3498db; text-decoration: none; font-size: 0.9em;">
-                        Discard and Start New Game
-                    </a>
                 </div>
             </div>
-        </form>
-    </div>
+            <div class="game-center-zone">
+                <div id="score-part">
+                    <div id="score-inner">
+                        <div class="score-display">Score: <span th:text="${score}">0</span></div>
 
-    <hr style="margin: 40px 0; border: 0; border-top: 1px solid #555;"/>
+                        <div th:if="${isMovesMode}"
+                             style="color: #ff4d4d; font-family: monospace; font-size: 1.4em; font-weight: bold; margin-top: 5px; text-shadow: 2px 2px 0 black;">
+                            Moves: <span th:text="${movesLeft}">0</span>
+                        </div>
+                    </div>
+                </div>
 
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div id="bomb-part">
+                    <div id="bomb-inner">
+                        <div th:if="${gameOver}" class="game-over-banner">
+                            <span th:if="${isMovesMode and movesLeft <= 0}">OUT OF MOVES!</span>
+                            <span th:if="${!isMovesMode or movesLeft > 0}">NO MORE SPACE!</span>
+                            <br>
+                        </div>
 
-        <div>
-            <h3>Top Scores</h3>
-            <table border="1" style="width: 100%; text-align: left;">
-                <thead>
-                <tr><th>Player</th><th>Score</th></tr>
-                </thead>
-                <tbody>
-                <tr th:each="s : ${scores}">
-                    <td th:text="${s.player}"></td>
-                    <td th:text="${s.points}"></td>
-                </tr>
-                </tbody>
-            </table>
+                        <div th:if="${hasBomb and !gameOver}">
+                            <a class="ajax-link bomb-btn" href="/block-puzzle/content?command=activateBomb"
+                               th:classappend="${bombMode} ? 'active-bomb' : ''">
+                                <span th:text="${bombMode} ? '💣 EXPLODE' : 'USE BOMB 💣'"></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div>
-            <h3>Recent Comments (Avg Rating: <span th:text="${avgRating}">0</span>)</h3>
-            <table border="1" style="width: 100%; text-align: left;">
-                <thead>
-                <tr><th>Player</th><th>Comment</th></tr>
-                </thead>
-                <tbody>
-                <tr th:each="c : ${comments}">
-                    <td th:text="${c.player}"></td>
-                    <td th:text="${c.comment}"></td>
-                </tr>
-                </tbody>
-            </table>
+        <div class="main-game-area">
+            <div id="fx-container"></div>
+
+            <div id="field-part">
+                <div id="field-inner" th:utext="${@blockPuzzleController.getHtmlField()}"></div>
+            </div>
+            <div id="blocks-part">
+                <div id="blocks-inner" th:utext="${@blockPuzzleController.getHtmlBlocks()}"></div>
+            </div>
         </div>
     </div>
-</div>
-
 </body>
 </html>

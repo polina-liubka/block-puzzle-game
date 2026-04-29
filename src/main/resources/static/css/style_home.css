@@ -1,0 +1,257 @@
+/*hlavna stranka*/
+body {
+    background-color: #000 !important;
+        background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+                    url('/images/landscape_home.png') no-repeat center center fixed;
+        background-size: cover;
+
+        color: white;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        padding: 20px;
+        image-rendering: pixelated;
+}
+/*BLOCK PUZZLE*/
+.pixel-title {
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 100px;
+    font-weight: 900;
+    color: #006400;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 10px;
+    letter-spacing: -2px;
+    display: block;
+    text-shadow:
+        2px 2px 0 #b8860b, 3px 3px 0 #b8860b,
+        -1px -1px 0 #2c2c2c, 1px -1px 0 #2c2c2c,
+        -1px 1px 0 #2c2c2c, 1px 1px 0 #2c2c2c,
+        6px 6px 0 rgba(0, 0, 0, 0.4);
+}
+
+.menu-box {
+    background-color: rgba(20, 20, 20, 0.5) !important;
+    padding: 5px 0;
+    width: 600px;
+    display: inline-block;
+    text-align: center;
+    margin-top: 20px;
+    border: none !important;
+}
+
+/*tlacidla hry a rezimy*/
+.btn-play {
+    display: block;
+    background: transparent;
+    color: #ffffff;
+    padding: 10px 0;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.5em;
+    font-family: 'Consolas', 'Monaco', monospace;
+    text-transform: uppercase;
+    letter-spacing: 6px;
+
+    text-shadow:
+        0 0 5px #2ecc71,
+        0 0 10px #2ecc71;
+
+    transition: all 0.3s ease;
+}
+
+.btn-play:hover {
+    text-shadow:
+        0 0 10px #2ecc71,
+        0 0 25px #2ecc71;
+    transform: scale(1.02);/*zvacsenie tlacidla*/
+}
+
+.tnt-decorator {
+    position: fixed;
+    top: -100px;
+    left: 70%;
+    width: 50px;
+    height: 50px;
+    background: url('/images/tnt.png') no-repeat center center;
+    background-size: contain;
+    z-index: 100;
+    pointer-events: none;
+
+    animation: tnt-drop 10s infinite;
+}
+
+.tnt-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 99;
+}
+
+
+.tnt-block {
+    position: fixed;
+    width: 40px;
+    height: 40px;
+    background: url('/images/tnt.png') no-repeat center center;
+    background-size: contain;
+    top: -50px;
+    opacity: 0;
+    z-index: 998;
+}
+
+.explosion-flash {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    background-color: rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    opacity: 0;
+    box-shadow:
+            0 0 20px 10px rgba(255, 255, 255, 0.3),
+            0 0 50px 30px rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -100%);
+    z-index: 999;
+}
+
+@keyframes tntDrop {
+    0% { top: -50px; opacity: 0; transform: rotate(0deg); }
+    10% { opacity: 1; }
+    99% { top: 100vh; opacity: 1; transform: rotate(360deg); }
+    100% { top: 100vh; opacity: 0; }
+}
+
+@keyframes flashExplosion {
+    0% { width: 20px; height: 20px; opacity: 0.8; }
+    50% { width: 200px; height: 200px; opacity: 0.6; }
+    100% { width: 300px; height: 300px; opacity: 0; }
+}
+
+.content-wrapper {
+    max-width: 800px;
+    margin: 50px auto;
+    text-align: center;
+}
+
+.auth-box {
+    margin-top: 50px;
+    background-color: rgba(20, 20, 20, 0.4);
+    padding: 20px;
+    display: inline-block;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+}
+
+.auth-title {
+    color: #f1c40f;
+    font-family: 'Consolas', monospace;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+}
+
+.auth-input {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid #2ecc71;
+    color: white;
+    padding: 10px;
+    font-family: 'Consolas', monospace;
+    outline: none;
+    width: 200px;
+    margin-bottom: 10px;
+}
+
+.auth-input:focus {
+    box-shadow: 0 0 10px rgba(46, 204, 113, 0.5);
+}
+
+.btn-auth {
+    background: #2ecc71;
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    font-family: 'Consolas', monospace;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: 0.3s;
+}
+
+.btn-auth:hover {
+    background: white;
+    box-shadow: 0 0 15px white;
+}
+
+/*aktualizacia stranky*/
+#loading-screen {
+    background-color: #000;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    image-rendering: pixelated;
+        background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+                    url('/images/landscape_home.png') no-repeat center center fixed;
+        background-size: cover;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 1s ease-out;
+}
+/*BLOCK PUZZLE*/
+.loading-title {
+    font-size: 100px !important;
+    margin-bottom: 50px;
+    text-shadow: 5px 5px #2ecc71;
+}
+
+.loader-container {
+    width: 300px;
+    position: relative;
+}
+
+.pixel-character {
+    width: 64px; height: 64px;
+    margin: 0 auto;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url('/images/loading1.jpg');
+    animation: runAnim 0.6s steps(1) infinite;
+    position: relative;
+    left: -150px;
+    animation: runAnim 0.6s steps(1) infinite, moveForward 3s linear forwards;
+}
+
+@keyframes runAnim {
+    0% { background-image: url('/images/loading1.png'); }
+    20% { background-image: url('/images/loading2.png'); }
+    40% { background-image: url('/images/loading3.png'); }
+    60% { background-image: url('/images/loading4.png'); }
+    80% { background-image: url('/images/loading5.png'); }
+}
+
+@keyframes moveForward {
+    to { transform: translateX(300px); }
+}
+
+.loading-bar-bg {
+    width: 100%;
+    height: 8px;
+    background: #333;
+    border: 2px solid #555;
+    margin-top: 5px;
+}
+
+.loading-bar-fill {
+    width: 0%;
+    height: 100%;
+    background: #2ecc71;
+    box-shadow: 0 0 10px #2ecc71;
+    animation: fillBar 3s linear forwards;
+}
+
+@keyframes fillBar {
+    to { width: 100%; }
+}

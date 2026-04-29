@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="preload" href="/images/landscape_home.png" as="image">
+    <title>Block Puzzle - Home</title>
+    <link rel="stylesheet" href="/css/style_home.css">
+</head>
+<body class="home-page">
+
+<div id="loading-screen">
+    <h1 class="pixel-title loading-title">BLOCK PUZZLE</h1>
+
+    <div class="loader-container">
+        <div class="pixel-character" id="runner"></div>
+        <div class="loading-bar-bg">
+            <div class="loading-bar-fill"></div>
+        </div>
+    </div>
+</div>
+
+<div class="content-wrapper">
+    <h1 class="pixel-title">BLOCK PUZZLE</h1>
+
+    <div class="action-section" th:if="${@userController.isLogged()}">
+
+        <div class="menu-box" th:if="${gameInProgress}" style="margin-bottom: 20px; border-color: #3498db;">
+            <h3 style="color: #3498db; font-family: monospace; margin-bottom: 10px;">ACTIVE MINE FOUND:</h3>
+            <a href="/block-puzzle" class="btn-play" style="background: #3498db; color: white;">CONTINUE MINING</a>
+        </div>
+
+        <div class="menu-box">
+            <h3 style="color: #f1c40f; font-family: monospace; margin-bottom: 15px;">START NEW MISSION:</h3>
+
+            <div style="display: flex; flex-direction: column; gap: 12px; align-items: center;">
+
+                <a href="/block-puzzle?command=new" class="btn-play" style="width: 250px; background: #2ecc71; color: black;">
+                    CLASSIC
+                </a>
+
+                <div style="color: white; font-family: monospace; margin-top: 10px; font-size: 0.9em;">CHALLENGE MODES:</div>
+                <div style="display: flex; gap: 10px;">
+                    <a href="/block-puzzle?mode=startMoves&moves=20" class="btn-play" style="background: #e74c3c; min-width: 65px; border: 2px solid white;">20</a>
+                    <a href="/block-puzzle?mode=startMoves&moves=35" class="btn-play" style="background: #f39c12; min-width: 65px; border: 2px solid white;">35</a>
+                    <a href="/block-puzzle?mode=startMoves&moves=50" class="btn-play" style="background: #27ae60; min-width: 65px; border: 2px solid white;">50</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <a href="/block-puzzle/stats" class="btn-auth" style="text-decoration: none; background: #f1c40f; color: black; padding: 10px 20px; display: inline-block;">
+            SHOW STATISTICS
+        </a>
+    </div>
+
+    <div class="auth-box" style="margin-top: 30px;">
+
+        <div th:if="${!@userController.isLogged()}">
+            <h3 class="auth-title">Sign up for playing</h3>
+            <form action="/login" method="post">
+                <input type="text" name="login" placeholder="Nickname" required class="auth-input" style="margin-bottom: 10px;"><br>
+                <input type="password" name="password" placeholder="Password" required class="auth-input" style="margin-bottom: 10px;"><br>
+                <button type="submit" class="btn-auth">START SESSION</button>
+            </form>
+        </div>
+
+        <div th:if="${@userController.isLogged()}">
+            <h3 class="auth-title">
+                Ready for mining, <span th:text="${@userController.loggedUser.login}" style="color: #2ecc71;"></span>?
+            </h3>
+            <p style="color: #bbb; font-size: 0.9em; margin-bottom: 15px;">Your progress will be saved automatically.</p>
+            <a href="/logout" class="btn-auth" style="text-decoration: none; background: #ff4d4d;">LOGOUT</a>
+        </div>
+
+    </div>
+</div>
+
+<div class="tnt-container">
+    <div class="tnt-block"></div>
+    <div class="explosion-flash"></div>
+</div>
+
+<script>
+    //tnt bomb
+    const tntBlock = document.querySelector('.tnt-block');
+    const explosion = document.querySelector('.explosion-flash');
+    
+    function createExplosion() {
+        const randomLeft = Math.random() * 90 + 5 + '%';
+        const bottomEdge = '100vh';
+
+        tntBlock.style.left = randomLeft;
+        explosion.style.left = randomLeft;
+        explosion.style.top = bottomEdge;
+
+        tntBlock.style.animation = 'none';
+        tntBlock.offsetHeight;
+        tntBlock.style.animation = `tntDrop 1.8s ease-in forwards`;
+
+        setTimeout(() => {
+            explosion.style.animation = 'none';
+            explosion.offsetHeight;
+            explosion.style.animation = 'flashExplosion 0.6s ease-out forwards';
+        }, 1800);
+
+        setTimeout(createExplosion, Math.random() * 5000 + 5000);
+    }
+
+    setTimeout(createExplosion, 2000);
+
+    //loading
+    window.addEventListener('load', () => {
+    const loader = document.getElementById('loading-screen');
+
+    const navEntries = performance.getEntriesByType("navigation");
+    const navType = navEntries.length > 0 ? navEntries[0].type : 'navigate';
+
+    if(!sessionStorage.getItem('loaderShown') || navType === 'reload'){
+        if(loader){
+            loader.style.display = 'flex';
+
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 1000);
+            }, 3500);
+        }
+        sessionStorage.setItem('loaderShown', 'true');
+    }else{
+        if(loader){
+            loader.style.display = 'none';
+        }
+    }
+    });
+</script>
+
+</body>
+</html>
