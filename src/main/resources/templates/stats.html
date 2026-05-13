@@ -119,7 +119,26 @@
     <div style="display: flex; gap: 30px; justify-content: center;">
         <a href="/block-puzzle-home" class="back-link">← BACK TO MINING HUB</a>
 
-        <a href="/block-puzzle?command=new" class="back-link" style="color: #f1c40f;">START NEW MINE</a>
+        <a th:if="${@userController.logged and @blockPuzzleController.gameInProgress}"
+           href="/block-puzzle"
+           class="back-link"
+           style="color: #3498db;">
+            CONTINUE CURRENT MINE →
+        </a>
+
+        <a th:if="${@userController.logged and !@blockPuzzleController.gameInProgress}"
+           href="/block-puzzle?command=new"
+           class="back-link"
+           style="color: #2ecc71;">
+            START NEW MINE →
+        </a>
+
+        <a th:if="${!@userController.logged}"
+           href="/block-puzzle-home"
+           class="back-link"
+           style="color: #f1c40f;">
+            SIGN UP TO PLAY →
+        </a>
     </div>
 </div>
 

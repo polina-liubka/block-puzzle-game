@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.WebApplicationContext;
+import sk.tuke.gamestudio.entity.Score;
 import sk.tuke.gamestudio.game.blockpuzzle.core.Block;
 import sk.tuke.gamestudio.game.blockpuzzle.core.Field;
 import sk.tuke.gamestudio.game.blockpuzzle.core.Tile;
@@ -74,13 +75,6 @@ public class BlockPuzzleController {
 
     @RequestMapping("/block-puzzle/stats")
     public String statistics(Model model) {
-        if (userController.isLogged() && field.getScore() > 0) {
-            String playerName = userController.getLoggedUser().getLogin();
-            scoreService.addScore(new sk.tuke.gamestudio.entity.Score(
-                    "block-puzzle", playerName, field.getScore(), new Date()
-            ));
-        }
-
         model.addAttribute("scores", scoreService.getTopScores("block-puzzle"));
         model.addAttribute("comments", commentService.getComments("block-puzzle"));
         try {
@@ -98,6 +92,10 @@ public class BlockPuzzleController {
         return "block-puzzle-home";
     }
 
+    public boolean isGameInProgress() {
+        return field.getScore() > 0 || !isFieldEmpty();
+    }
+
     private boolean isFieldEmpty() {
         for (int r = 0; r < field.getRowCount(); r++) {
             for (int c = 0; c < field.getColumnCount(); c++) {
@@ -107,18 +105,19 @@ public class BlockPuzzleController {
         return true;
     }
 
-    @RequestMapping("/logout")
+    @RequestMapping("/block-puzzle/logout")
     public String logoutAndSave() {
-        if (userController.isLogged()) {
-            String playerName = userController.getLoggedUser().getLogin();
-            if (field.getScore() > 0) {
-                scoreService.addScore(new sk.tuke.gamestudio.entity.Score(
-                        "block-puzzle", playerName, field.getScore(), new Date()
-                ));
-            }
+        if (userController.isLogged() && !field.isOver()) {
+            scoreService.addScore(new Score(
+                    "block-puzzle",
+                    userController.getLoggedUser().getLogin(),
+                    field.getScore(),
+                    new Date()
+            ));
         }
-        field.reset();
+        this.field = new Field(10, 10);
         userController.logout();
+
         return "redirect:/block-puzzle-home";
     }
 
@@ -177,6 +176,16 @@ public class BlockPuzzleController {
                             field.generateBlocks();
                         }
                         field.gameOver();
+                        if(field.isOver()){
+                            if(userController.isLogged()){
+                                scoreService.addScore(new sk.tuke.gamestudio.entity.Score(
+                                        "block-puzzle",
+                                        userController.getLoggedUser().getLogin(),
+                                        field.getScore(),
+                                        new Date()
+                                ));
+                            }
+                        }
                     }
                 }
             }

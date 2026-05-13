@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.WebApplicationContext;
-import sk.tuke.gamestudio.entity.User; // Перевір, чи є цей клас в entity
+import sk.tuke.gamestudio.entity.User;
 
 @Controller
 @Scope(WebApplicationContext.SCOPE_SESSION)
@@ -13,15 +13,22 @@ public class UserController {
 
     @RequestMapping("/login")
     public String login(String login, String password) {
-        if ("qwerty".equals(password)) {
-            loggedUser = new User(login);
-            return "redirect:/block-puzzle-home";
+        if (login == null || login.trim().isEmpty()) {
+            return "redirect:/block-puzzle-home?error=empty_fields";
         }
-        return "redirect:/";
+
+        User user = new User(login);
+        user.setLogin(login);
+
+        this.loggedUser = user;
+
+        return "redirect:/block-puzzle-home";
     }
 
-    public void logout() {
+    @RequestMapping("/logout")
+    public String logout() {
         loggedUser = null;
+        return "redirect:/block-puzzle-home";
     }
 
     public User getLoggedUser() {

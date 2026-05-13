@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preload" href="/images/landscape_home.png" as="image">
     <title>Block Puzzle - Home</title>
     <link rel="stylesheet" href="/css/style_home.css">
@@ -71,7 +72,7 @@
                 Ready for mining, <span th:text="${@userController.loggedUser.login}" style="color: #2ecc71;"></span>?
             </h3>
             <p style="color: #bbb; font-size: 0.9em; margin-bottom: 15px;">Your progress will be saved automatically.</p>
-            <a href="/logout" class="btn-auth" style="text-decoration: none; background: #ff4d4d;">LOGOUT</a>
+            <a href="/block-puzzle/logout" class="btn-auth" style="text-decoration: none; background: #ff4d4d;">LOGOUT</a>
         </div>
 
     </div>

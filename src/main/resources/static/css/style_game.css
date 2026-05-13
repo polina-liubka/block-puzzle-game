@@ -283,3 +283,64 @@ body {
         opacity: 0;
     }
 }
+
+/* for phone */
+@media (max-width: 768px) {
+    .game-layout {
+        padding: 10px;
+    }
+
+    .top-interface {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 15px;
+    }
+
+    .header-left-zone {
+        align-items: center;
+    }
+
+    .pixel-title-game {
+        font-size: 28px;
+    }
+
+    .score-display {
+        font-size: 1.8em;
+    }
+
+    #field-part .game-table td {
+        width: 32px !important;
+        height: 32px !important;
+    }
+
+    #field-part .game-table img {
+        width: 30px !important;
+        height: 30px !important;
+    }
+
+    .blocks-container {
+        gap: 5px;
+        min-height: 120px;
+        flex-wrap: wrap;
+    }
+
+    .block-slot {
+        width: 100px;
+        height: 100px;
+    }
+
+    .block-slot .game-table td {
+        width: 18px !important;
+        height: 18px !important;
+    }
+
+    .block-slot .game-table img {
+        width: 18px !important;
+        height: 18px !important;
+    }
+
+    .main-game-area {
+        margin-top: 10px;
+    }
+}
