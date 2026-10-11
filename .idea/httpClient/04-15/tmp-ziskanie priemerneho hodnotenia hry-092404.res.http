@@ -1,0 +1,9 @@
+// Status: 200, time: 63ms, size: 1 B
+### ziskanie priemerneho hodnotenia hry
+GET http://localhost:8080/api/rating/blockpuzzle HTTP/1.1
+content-type: application/json
+date: Wed, 15 Apr 2026 19:24:04 GMT
+transfer-encoding: chunked
+
+4
+>> C:\Users\red_w\IdeaProjects\gamestudio-11420\.idea\httpClient\04-15\ziskanie priemerneho hodnotenia hry\2026-04-15T212404.json

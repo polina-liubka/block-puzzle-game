@@ -1,0 +1,9 @@
+// Status: 200, time: 41ms, size: 1 B
+### ziskanie hodnotenia hry konkretneho hraca
+GET http://localhost:8080/api/rating/blockpuzzle/michal HTTP/1.1
+content-type: application/json
+date: Thu, 16 Apr 2026 10:37:26 GMT
+transfer-encoding: chunked
+
+5
+>> C:\Users\red_w\IdeaProjects\gamestudio-11420\.idea\httpClient\04-16\ziskanie hodnotenia hry konkretneho hraca\2026-04-16T123726.json

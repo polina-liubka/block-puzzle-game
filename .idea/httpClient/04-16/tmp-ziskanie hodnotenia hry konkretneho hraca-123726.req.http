@@ -1,0 +1,5 @@
+// Size: 0 B
+### ziskanie hodnotenia hry konkretneho hraca
+GET http://localhost:8080/api/rating/blockpuzzle/michal HTTP/1.1
+Content-Length: 0
+

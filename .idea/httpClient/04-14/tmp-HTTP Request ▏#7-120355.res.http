@@ -1,0 +1,9 @@
+// Status: 200, time: 17ms, size: 1 B
+### HTTP Request ▏#7
+GET http://localhost:8080/api/rating/blockpuzzle/chloe HTTP/1.1
+content-type: application/json
+date: Mon, 13 Apr 2026 22:03:55 GMT
+transfer-encoding: chunked
+
+0
+>> C:\Users\red_w\IdeaProjects\gamestudio-11420\.idea\httpClient\04-14\HTTP Request ▏#7\2026-04-14T000355.json

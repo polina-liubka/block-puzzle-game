@@ -1,0 +1,22 @@
+// Status: 200, time: 736ms, size: 193 B
+### ziskanie top score pre danu hru
+GET http://localhost:8080/api/score/blockpuzzle HTTP/1.1
+content-type: application/json
+date: Thu, 16 Apr 2026 09:47:27 GMT
+transfer-encoding: chunked
+
+[
+  {
+    "game": "blockpuzzle",
+    "player": "chloe",
+    "points": 172,
+    "playedOn": "2026-04-15T19:59:40.571+00:00"
+  },
+  {
+    "game": "blockpuzzle",
+    "player": "michal",
+    "points": 71,
+    "playedOn": "2026-04-15T19:57:45.412+00:00"
+  }
+]
+>> C:\Users\red_w\IdeaProjects\gamestudio-11420\.idea\httpClient\04-16\ziskanie top score pre danu hru\2026-04-16T114727.json

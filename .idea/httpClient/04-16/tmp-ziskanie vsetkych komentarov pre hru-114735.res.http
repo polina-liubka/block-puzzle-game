@@ -1,0 +1,22 @@
+// Status: 200, time: 62ms, size: 207 B
+### ziskanie vsetkych komentarov pre hru
+GET http://localhost:8080/api/comment/blockpuzzle HTTP/1.1
+content-type: application/json
+date: Thu, 16 Apr 2026 09:47:35 GMT
+transfer-encoding: chunked
+
+[
+  {
+    "player": "chloe",
+    "game": "blockpuzzle",
+    "comment": "good",
+    "playedOn": "2026-04-15T20:00:09.565+00:00"
+  },
+  {
+    "player": "michal",
+    "game": "blockpuzzle",
+    "comment": "cool game",
+    "playedOn": "2026-04-15T19:57:57.299+00:00"
+  }
+]
+>> C:\Users\red_w\IdeaProjects\gamestudio-11420\.idea\httpClient\04-16\ziskanie vsetkych komentarov pre hru\2026-04-16T114735.json

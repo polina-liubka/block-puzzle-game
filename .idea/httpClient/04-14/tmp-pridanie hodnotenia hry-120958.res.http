@@ -1,0 +1,8 @@
+// Status: 200, time: 23ms, size: 0 B
+### pridanie hodnotenia hry
+POST http://localhost:8080/api/rating HTTP/1.1
+content-length: 0
+date: Mon, 13 Apr 2026 22:09:58 GMT
+
+
+>> C:\Users\red_w\IdeaProjects\gamestudio-11420\.idea\httpClient\04-14\pridanie hodnotenia hry\2026-04-14T000958.txt

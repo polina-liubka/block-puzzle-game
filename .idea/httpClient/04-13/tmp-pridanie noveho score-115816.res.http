@@ -1,0 +1,8 @@
+// Status: 200, time: 22ms, size: 0 B
+### pridanie noveho score
+POST http://localhost:8080/api/score HTTP/1.1
+content-length: 0
+date: Mon, 13 Apr 2026 21:58:16 GMT
+
+
+>> C:\Users\red_w\IdeaProjects\gamestudio-11420\.idea\httpClient\04-13\pridanie noveho score\2026-04-13T235816.txt

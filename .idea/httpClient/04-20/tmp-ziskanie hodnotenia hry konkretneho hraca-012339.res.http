@@ -1,0 +1,9 @@
+// Status: 200, time: 16ms, size: 1 B
+### ziskanie hodnotenia hry konkretneho hraca
+GET http://localhost:8080/api/rating/blockpuzzle/maria HTTP/1.1
+content-type: application/json
+date: Mon, 20 Apr 2026 11:23:39 GMT
+transfer-encoding: chunked
+
+4
+>> C:\Users\red_w\IdeaProjects\gamestudio-11420\.idea\httpClient\04-20\ziskanie hodnotenia hry konkretneho hraca\2026-04-20T132339.json

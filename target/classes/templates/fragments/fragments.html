@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+<div th:fragment="header">
+    <header style="background-color: #2c3e50; color: #ecf0f1; padding: 20px; text-align: center; margin-bottom: 20px; border-radius: 0 0 10px 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <h1 style="margin: 0;">🧩 Block Puzzle Game Studio</h1>
+        <p style="margin: 5px 0 0; font-size: 0.9em; opacity: 0.8;">Developed at TUKE</p>
+        <hr style="border: 0; border-top: 1px solid #34495e; margin: 15px 0;"/>
+        <nav>
+            <a href="/block-puzzle?command=new" style="color: #f1c40f; text-decoration: none; font-weight: bold;">[ New Game ]</a>
+            <span style="margin: 0 15px;">|</span>
+            <a href="/" style="color: #ecf0f1; text-decoration: none;">[ Home ]</a>
+        </nav>
+    </header>
+</div>
+
+<div th:fragment="footer">
+    <footer style="text-align: center; margin-top: 50px; padding: 20px; color: #7f8c8d; font-size: 0.8em;">
+        <hr style="border: 0; border-top: 1px solid #ddd; margin-bottom: 20px;"/>
+        <p>GameStudio © 2026 | Block Puzzle Project</p>
+    </footer>
+</div>
+
+</body>
+</html>
