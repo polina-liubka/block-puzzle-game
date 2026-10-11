@@ -199,7 +199,6 @@ public class BlockPuzzleController {
             field.reset();
             return "redirect:/block-puzzle-home";
         }
-
         fillModel(model, player);
         return "block-puzzle";
     }
@@ -210,7 +209,6 @@ public class BlockPuzzleController {
         model.addAttribute("hasBomb", field.isHasBomb());
         model.addAttribute("bombMode", bombMode);
 
-        // Передаємо дані про ходи в HTML
         model.addAttribute("movesLeft", field.getMovesLeft());
         model.addAttribute("isMovesMode", field.isMovesMode());
 
